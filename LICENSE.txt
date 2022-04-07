@@ -1,0 +1,121 @@
+HILSCHER netFIELD Source Code/Software LICENSE AGREEMENT
+
+This document is a legally valid contract between you and Hilscher Gesellschaft für Systemautomation mbH (“Hilscher”). Please read
+through this License Agreement carefully before installing and using the software. By installing the software and using it, whether in
+whole or in part, you accept all of the provisions of this Agreement. If you decline to accept these terms and conditions, please do not
+install or use the software.
+
+The software is not free.
+
+Next to Hilscher software components the software may include and use also components released as Open Source software licensed
+under Open Source licenses such as listed here https://opensource.org/licenses. For those Open Source software components the
+license terms of this license do NOT apply. Instead the concrete licensing information are made available by Hilscher to the user as a
+separate information in either textual form or as link.
+
+Redistribution and use in source and binary forms of the software, with or without modification, are permitted provided that the following
+conditions are met:
+
+A. The copyright notice: Copyright © 2021 Hilscher Gesellschaft für Systemautomation mbH must be included in all copies or substantial
+portions of the Software.
+
+B. Redistributions must reproduce the following disclaimer:
+
+NO WARRANTY
+EXCEPT AS EXPRESSLY SET FORTH IN THE LICENSE AGREEMENT, THE PROGRAM IS PROVIDED ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION,
+ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR
+PURPOSE. Each Recipient is solely responsible for determining the appropriateness of using and distributing the Program and
+assumes all risks associated with its exercise of rights under this Agreement , including but not limited to the risks and costs of program
+errors, compliance with applicable laws, damage to or loss of data, programs or equipment, and unavailability or interruption of
+operations. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+DISCLAIMER OF LIABILITY
+EXCEPT AS EXPRESSLY SET FORTH IN LICENSE AGREEMENT, NEITHER RECIPIENT NOR ANY CONTRIBUTORS SHALL
+HAVE ANY LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OR DISTRIBUTION OF THE PROGRAM OR THE EXERCISE OF ANY RIGHTS GRANTED HEREUNDER, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGES.
+
+C. The software may only be used / modified / an distributed if you have
+ * purchased the software from Hilscher by direct purchase or
+ * purchased indirectly by purchasing a product Hilscher Product that includes the software or
+ * Hilscher has explicitly agreed /approved the use of the software in writing or
+ * Hilscher is making the software publicly available via electronic communication services, such as any internet platform.
+
+D. In case of indirect purchase of the software through a Hilscher product (where the software was included), it is not allowed to use the
+software commercially or transfer it to any other than the purchased product. Under no circumstances, you are entitled to publicly
+reproduce it or make it accessible to others.
+
+II. Copyright
+
+Marked parts of this software program are protected under German and international copyright law as well as under international laws
+and regulations governing commerce and the protection of intellectual property. Hilscher retains all ownership rights thereto, including
+all intellectual property rights.
+
+III. Termination
+
+The provisions hereof governing licensing shall continue in force until this Agreement is terminated. You may terminate this Agreement
+at any time by destroying all copies of the Software. Hilscher will automatically terminate your license without further notice if you violate
+the provisions or conditions of this License Agreement. In such a case, you are obligated to destroy all copies of this Software and all
+parts and components, irrespective of the form thereof.
+
+IV. Warranty
+
+Hilscher cannot guarantee that the Software will meet your requirements, that you will enjoy uninterrupted use thereof, or that the
+Software is free of errors and defects.
+Hilscher’s warranty extends, at its own option, to subsequent performance or to reimbursement of the purchase price. A defect is also
+deemed to have been remedied if Hilscher notifies you of reasonable ways to avoid the effects of the defect in question. Nothing herein
+shall affect the rights of the Parties to rescind this Agreement or reduce the payment owed hereunder; these rights must be asserted by
+way of written notice. If Hilscher performs services during troubleshooting or remediation of errors without being obligated to do so,
+Hilscher is entitled to demand remuneration for such services in accordance with the customary fees. This applies in particular if the
+presence of a defect cannot be proven or if the defect is not attributable to Hilscher.
+
+With the exception of the abovementioned limited warranty with regard to a licensed full version of the Software, Hilscher disclaims any
+and all other warranties, whether express, implied, or of any other nature. Likewise, Hilscher makes no warranty that it will not assign
+rights to another party or any warranty regarding the ownership rights to the Software, or that the Software is free of interventions by
+third parties.
+Using the Software for military purposes, or utilizing it in applications or systems in which potential Software malfunctions might, as far
+as it is humanly possible to determine, cause or entail bodily injury or injuries leading to death, is prohibited. If you use the Software in
+such an environment, you do so at your own risk. The Software is not designed, intended, or licensed for use in dangerous
+environments that demand fail-safe control mechanisms.
+Use of the Software is strictly prohibited in the fields of design, construction, maintenance, or operation of nuclear facilities and of air
+traffic control or air communications systems, as well as the field of life support or weapons systems. Hilscher disclaims any and all
+liability for damage or losses resulting from such use of the Software in violation of this provision.
+
+IV. Disclaimer
+
+The Software was produced and tested by Hilscher with care and is provided to you purely as is. Hilscher cannot make any warranty
+that the Software is functional or free of errors with regard to all conditions and cases arising in the IoT Gateway Produkt application
+thereof, or for the results of work produced when the Software is used by the user.
+
+Hilscher makes no further representations or warranties and grants no further provisions or conditions (whether express or implied,
+arising from a business relationship or customary practice, or derived from statutory, common-law, or other laws and regulations) with
+regard to the Software’s merchantability, freedom from defects in title, suitability for integration or usability for particular purposes, unless
+such representations, warranties, and/or provisions are stipulated under applicable law and cannot be restricted.
+
+In all cases of contractual or non-contractual liability, Hilscher shall pay damages only within the following limits:
+
+a) In the case of wrongful intent, Hilscher shall pay damages in the full amount. In the case of gross negligence, Hilscher is liable only if
+and insofar as the damage or loss in question is foreseeable and typically occurs in such situations and the obligation that has been
+violated should have prevented it. Hilscher disclaims all liability for gross fault on the part of its agents in performance of its contractual
+representative or vicarious agents vis-à-vis commercial business entities if the present Agreement pertains to such entities’ commercial
+business operations, unless the fault lies with executive representatives in performance of Hilscher or primary contractual obligations
+have been violated. Hilscher is likewise liable in the event that the Software does not display a characteristic quality warranted by
+Hilscher.
+
+b) Hilscher is liable for ordinary negligence only if and insofar as compliance with the obligation that has been violated is especially
+important to achieving the purpose of this Agreement (cardinal obligation). In the event of violation of a cardinal obligation, Hilscher’s
+liability is limited to the damage or losses that can typically be expected to occur in the context of provision of software.
+
+c) Liability for data loss is limited to the typical costs of restoration thereof that would be incurred if backup copies were made regularly
+and in accordance with the level of risk in question.
+
+d) Nothing herein shall affect the liability of Hilscher for personal injury or its liability pursuant to the Produkthaftungsgesetz (Product
+Liability Act of the Federal Republic of Germany).
+
+V. Miscellaneous Provisions
+
+Should it transpire that any part of this Agreement is invalid, unlawful, or unenforceable, such circumstance shall not affect the validity
+and enforceability of the remainder hereof. If you have any questions regarding this License Agreement, please contact Hilscher.
