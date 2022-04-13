@@ -167,7 +167,7 @@ Be aware that Hilscher, in nearly 100% of cases described above, cannot provide 
 
 **NOTE:** We are not supporting general questions about Linux, Azure IoT Edge, Docker, or Non-Hilscher containers since they are of type 3rd party and maintained by the community.
   
-**HINT:** If it comes to the error `invalid options` even if all given arguments seem to be correct then the script was copied through a Windows system which replaces the linefeed chars with cariage-return linefeeds im the script leading to misinterpretations. So make sure your script is 100% origin.
+**HINT:** If it comes to the error `invalid options` even if all given arguments seem to be correct then the script was copied through a Windows system which replaces the script's LF chars with CR LF leading to misinterpretations. So make sure your script is 100% origin.
   
 #### Examples
 ##### Onboard a Device
