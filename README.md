@@ -111,11 +111,13 @@ Make sure the following permissions have been granted for successful execution:
 
 ### Installation
 
-Download the script [netfield-extension-linux-installer.sh](netfield-extension-linux-installer.sh) and make sure it has execution permission on the device.
+Download just the script [netfield-extension-linux-installer.sh](netfield-extension-linux-installer.sh) or the whole project with `sudo git clone https://github.com/hilschernetiotedge/netFIELD-extension-linux.git`. 
+
+Make sure the script has execution permission on the device else use `sudo chmod +x netfield-extension-linux-installer.sh`.
 
 Calling the script needs administrative rights either when called as user `root` or with `sudo.` 
 
-Script parameters are passed to it as inline arguments. The usage is `sudo netfield-extension-linux-installer.sh <options> onboard|offboard`
+Script parameters are passed to it as inline arguments. The usage is `sudo ./netfield-extension-linux-installer.sh <options> onboard|offboard`
 
 The field <options> may contain single or multiple instructions as follows
 
@@ -162,38 +164,40 @@ The primary goal for analyzing such a problem should be to identify its root cau
 For the example above, narrow down the problem by calling `apt install ccc-ddd-eee` manually. If it fails, you can dig into details and search on the Internet if others have the same problem with this component. 
   
 Be aware that Hilscher, in nearly 100% of cases described above, cannot provide support if there is suspicion that any of your Linux components or its installer is broken.
-  
+
 **NOTE:** We are not supporting general questions about Linux, Azure IoT Edge, Docker, or Non-Hilscher containers since they are of type 3rd party and maintained by the community.
+  
+**HINT:** If it comes to the error `invalid options` even if all given arguments seem to be correct then the script was copied through a Windows system which replaces the linefeed chars with cariage-return linefeeds im the script leading to misinterpretations. So make sure your script is 100% origin.
   
 #### Examples
 ##### Onboard a Device
 ```
-sudo netfield-extension-linux-installer.sh -a <apikey> onboard
+sudo ./netfield-extension-linux-installer.sh -a <apikey> onboard
 ```
 ```
-sudo netfield-extension-linux-installer.sh -u <username> -p <password> onboard
+sudo ./netfield-extension-linux-installer.sh -u <username> -p <password> onboard
 ```
 ```
-sudo netfield-extension-linux-installer.sh -u <username> -p <password> -i xxx.netfield.io onboard
+sudo ./netfield-extension-linux-installer.sh -u <username> -p <password> -i xxx.netfield.io onboard
 ```
 ##### Offboard a Device
 ```
-sudo netfield-extension-linux-installer.sh -a <apikey> offboard
+sudo ./netfield-extension-linux-installer.sh -a <apikey> offboard
 ```
 ```
-sudo netfield-extension-linux-installer.sh -u <username> -p <password> offboard
+sudo ./netfield-extension-linux-installer.sh -u <username> -p <password> offboard
 ```
 ```
-sudo netfield-extension-linux-installer.sh -u <username> -p <password> -i xxx.netfield.io offboard
+sudo ./netfield-extension-linux-installer.sh -u <username> -p <password> -i xxx.netfield.io offboard
 ```
 
 ### Azure IoT Edge Docker Daemon
 
-The script configures the "Azure IoT Edge Runtime" controlled docker daemon to listen to the UNIX socket `unix:///run/iotedge-docker.sock`. This additional Docker daemon enables dual Docker daemons to run in parallel in contrast to the one standard Docker daemon, usually listening to socket `unix:///var/run/docker.sock`.
+The script configures the "Azure IoT Edge Runtime" controlled Docker daemon to listen to the UNIX socket `unix:///run/iotedge-docker.sock`. This additional Docker daemon enables dual Docker daemons to run in parallel in contrast to the one standard Docker daemon, usually listening to socket `unix:///var/run/docker.sock` only.
 
-Nevertheless, the well-known cli tool [docker](https://docs.docker.com/engine/reference/commandline/cli/) can be used in conjunction with the Azure IoT Edge docker daemon. This needs just passing the correct socket to it as argument `docker -H unix:///run/iotedge-docker.sock <command>`.
+Nevertheless, the well-known command line interface tool [docker](https://docs.docker.com/engine/reference/commandline/cli/) can be used in conjunction with the Azure IoT Edge docker daemon too. This needs just passing the correct socket to it as argument like `docker -H unix:///run/iotedge-docker.sock <command>`.
 
-For better usability an alias can be defined like `alias docker-iotedge="docker -H unix:///run/iotedge-docker.sock"` and then calling `docker-iotedge <command>` instead.
+For better usability the script defines an alias `alias docker-iotedge="docker -H unix:///run/iotedge-docker.sock"` during installation. This allows calling the Azure IoT Edge Docker cli simply with `docker-iotedge <command>`.
 
 ### Remote Accessing/Port Forwarding
 
