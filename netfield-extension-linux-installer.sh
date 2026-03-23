@@ -1,5 +1,5 @@
 #!/bin/bash -e
-version="1.1.1"
+version="1.1.2"
 
 AZIOT_VERSION="1.5.10"
 AZIOT_IDENTITY_VERSION="1.5.3"
@@ -229,8 +229,25 @@ install_prerequisites() {
 			packages_to_install="$packages_to_install jq"
 		fi
 
+		# Check if Docker is installed and has correct version (24.0.x)
+		install_docker=0
 		if ! command -v docker >/dev/null; then
-			print_verbose "docker not found: Installing moby"
+			print_verbose "docker not found: Will install docker"
+			install_docker=1
+		else
+			current_docker_version=$(docker --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+			if [[ ! "$current_docker_version" =~ ^24\.0\. ]]; then
+				print_verbose "docker version $current_docker_version found, but 24.0.x is required for iotedge compatibility"
+				echo "WARNING: Docker version $current_docker_version is installed, but version 24.0.x is required for iotedge."
+				echo "Please manually remove the existing Docker installation and re-run this script,"
+				echo "or manually install Docker 24.0.x"
+			else
+				print_verbose "docker version $current_docker_version found (24.0.x required) - OK"
+			fi
+		fi
+
+		if [ "$install_docker" = "1" ]; then
+			print_verbose "Installing docker version 24.0.x (required for iotedge compatibility)"
 
 			# Convert distributor id to lowercase, e.g. "Debian" => "debian"
 			lower_id=$(echo $ID | tr '[:upper:]' '[:lower:]')
@@ -243,7 +260,26 @@ install_prerequisites() {
 				"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$lower_id $(lsb_release -cs) stable" \
 				| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-			packages_to_install="$packages_to_install docker-ce docker-ce-cli containerd.io docker-compose-plugin"
+			apt-get update
+
+			# Install specific Docker version 24.0.x for iotedge compatibility
+			# Find the exact available 24.0.x version
+			docker_version=$(apt-cache madison docker-ce | grep '24\.0\.' | head -1 | awk '{print $3}')
+			if [ -z "$docker_version" ]; then
+				echo "ERROR: Docker version 24.0.x not found in repository. Available versions:"
+				apt-cache madison docker-ce | head -10
+				exit 1
+			fi
+			print_verbose "Found docker-ce version: $docker_version"
+
+			# Extract version number for containerd (use compatible version)
+			containerd_version=$(apt-cache madison containerd.io | head -1 | awk '{print $3}')
+
+			apt-get install -y docker-ce="$docker_version" docker-ce-cli="$docker_version" containerd.io docker-compose-plugin
+
+			# Hold docker packages to prevent automatic upgrades
+			apt-mark hold docker-ce docker-ce-cli
+			print_verbose "Docker packages held to prevent automatic upgrades"
 		fi
 
 		if [ -n "$packages_to_install" ]; then
