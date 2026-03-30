@@ -1,5 +1,5 @@
 #!/bin/bash -e
-version="1.1.2"
+version="1.1.3"
 
 AZIOT_VERSION="1.5.10"
 AZIOT_IDENTITY_VERSION="1.5.3"
