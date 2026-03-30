@@ -252,12 +252,22 @@ install_prerequisites() {
 			# Convert distributor id to lowercase, e.g. "Debian" => "debian"
 			lower_id=$(echo $ID | tr '[:upper:]' '[:lower:]')
 
+			# Determine the correct codename for Docker repository
+			# Docker 24.0.x is not available for Ubuntu 24.04 (noble), so use jammy repository instead
+			docker_codename=$(lsb_release -cs)
+			case "$docker_codename" in
+				noble)
+					print_verbose "Ubuntu 24.04 (noble) detected - using jammy repository for Docker 24.0.x compatibility"
+					docker_codename="jammy"
+					;;
+			esac
+
 			sudo mkdir -p /etc/apt/keyrings
 			curl -fsSL https://download.docker.com/linux/$lower_id/gpg  | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 			chmod a+r /etc/apt/keyrings/docker.gpg
 
 			echo \
-				"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$lower_id $(lsb_release -cs) stable" \
+				"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$lower_id $docker_codename stable" \
 				| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 			apt-get update
