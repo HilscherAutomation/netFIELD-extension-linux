@@ -1,9 +1,18 @@
 #!/bin/bash -e
-version="1.1.3"
+version="1.1.4"
 
 AZIOT_VERSION="1.5.10"
 AZIOT_IDENTITY_VERSION="1.5.3"
 
+cleanup_curl_temp_dir() {
+	if [ -n "$curl_temp_dir" ]; then
+		rm -rf -- "$curl_temp_dir"
+		curl_temp_dir=""
+	fi
+}
+
+curl_temp_dir=""
+trap cleanup_curl_temp_dir EXIT
 usage() {
 	cat <<EOF >&2
 Usage $0 <options> onboard|offboard
@@ -23,13 +32,7 @@ EOF
 
 print_verbose() {
 	if [ "$verbose" = "1" ]; then
-		if [ -n "$password" ]; then
-			# shellcheck disable=SC2001
-			echo "${1//\"$password\"/\"****\"}" | sed -e 's;\("accessToken"[ ]*:[ ]*\)".*";\1"*****";gi'
-		else
-			# shellcheck disable=SC2001
-			echo "$1" | sed -e 's;\("accessToken"[ ]*:[ ]*\)".*";\1"*****";gi'
-		fi
+		printf '%s\n' "$1" | sed -E 's;("(accessToken|workspaceToken|refreshToken|connectionString|password|code|token|apiKey|sharedAccessKey)"[[:space:]]*:[[:space:]]*")[^"]*";\1*****";gi'
 	fi
 }
 
@@ -388,18 +391,36 @@ execute_cloud_command() {
 	local url="$2"
 	local add_header="$3"
 	local data="$4"
+	local header_args=()
 	# If error_message is empty, we expect the caller to evaluate results
 	local error_message="$5"
 
+	if ! backend_url_is_valid "$url"; then
+		echo "Invalid cloud request URL; expected HTTPS on netfield.io or a subdomain, using port 443"
+		exit 1
+	fi
+
 	print_verbose " -> $url [$request, $(echo "$data" | jq -c .)]"
 
+	curl_temp_dir=$(mktemp -d)
+	chmod 0700 "$curl_temp_dir"
+	if [ -n "$add_header" ]; then
+		local header_file="$curl_temp_dir/headers"
+		if ! printf '%s\n' "$add_header" > "$header_file" || ! chmod 0600 "$header_file"; then
+			echo "Error preparing secure cloud request headers"
+			exit 1
+		fi
+		header_args=(-H "@$header_file")
+	fi
+
 	set +e
-	response=$(curl -s --show-error -X "$request" "$url" \
-			     -H "$add_header" \
+	response=$(printf '%s' "$data" | curl -s --show-error --proto '=https' -X "$request" "$url" \
+			     "${header_args[@]}" \
 			     -H 'Content-Type: application/json' \
-			     -d "$data" 2>&1)
+			     --data-binary @- 2>&1)
 	local error=$?
 	set -e
+	cleanup_curl_temp_dir
 
 	if [ $error -ne 0 ]; then
 		if [ -n "$error_message" ]; then
@@ -702,13 +723,17 @@ onboard_device() {
 		;;
 	esac
 
-	cat <<EOF>/etc/netfield.io
+(
+	umask 077
+	cat <<EOF > /etc/netfield.io
 connectionstring="$connectionstring"
 deviceid="$deviceid"
 serial_number="$serial_number"
 instance="$instance"
 apiinstance="$apiinstance"
 EOF
+)
+	chmod 0600 /etc/netfield.io
 
 	# Create or overwrite the default gateway settings which is required by most netfield containers
 	mkdir -p /etc/gateway
@@ -867,6 +892,10 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+if [ -e "/etc/netfield.io" ]; then
+	chmod 0600 /etc/netfield.io
+fi
+
 if [ "$ID" = "raspbian" ]; then
    echo "Found Raspbian OS distribution, treating it as debian"
    ID="debian"
@@ -918,8 +947,49 @@ fi
 # shellcheck disable=SC2119
 install_prerequisites
 
-# extract the corresponding back-end URL (https://api...) from given instance info page
-apiinstance=$(curl -s 'https://'"${instance}"'/info' | jq -r '.backendUrl')
+backend_url_is_valid() {
+	local url="$1"
+	local remainder authority hostname port path
+
+	case "$url" in
+	https://*) remainder="${url#https://}" ;;
+	*) return 1 ;;
+	esac
+
+	case "$remainder" in
+	*'?'*|*'#'*|*'@'*|*\\*|*[[:space:]]*) return 1 ;;
+	esac
+
+	authority="${remainder%%/*}"
+	[ -n "$authority" ] || return 1
+	path=""
+	if [[ "$remainder" == */* ]]; then
+		path="/${remainder#*/}"
+	fi
+
+	case "$authority" in
+	*:*)
+		hostname="${authority%:*}"
+		port="${authority##*:}"
+		[ "$port" = "443" ] || return 1
+		;;
+	*) hostname="$authority" ;;
+	esac
+
+	hostname="${hostname,,}"
+	[[ "$hostname" =~ ^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)*netfield\.io$ ]] || return 1
+	[[ "$path" =~ ^(/[a-zA-Z0-9._~-]+)*/?$ ]]
+}
+
+info_response=$(curl -fsS --proto '=https' "https://${instance}/info")
+apiinstance=$(printf '%s' "$info_response" | jq -er '.backendUrl | strings | select(length > 0)')
+if ! backend_url_is_valid "$apiinstance"; then
+	echo "Invalid backendUrl in instance info; expected HTTPS on netfield.io or a subdomain, using port 443"
+	exit 1
+fi
+while [[ "$apiinstance" == */ ]]; do
+	apiinstance="${apiinstance%/}"
+done
 
 case "$1" in
 	onboard)  onboard_device ;;
